@@ -7,7 +7,6 @@ const drivePriorityCheckbox = document.getElementById('drive-priority');
 const message = document.getElementById('settings-message');
 const lampTab = document.getElementById('tab-lamp');
 const driveTab = document.getElementById('tab-drive');
-const mediaTab = document.getElementById('tab-media');
 
 let settingsChangeListeners = [];
 
@@ -37,15 +36,12 @@ function updateLampTabVisibility(allowed) {
   }
 }
 
-/** The Drive and Media tabs both need the drive. */
 function updateDriveTabVisibility(allowed) {
-  [driveTab, mediaTab].forEach(tab => {
-    tab.classList.toggle('ghost-tab', !allowed);
-    tab.disabled = !allowed;
-    if (!allowed) {
-      leaveIfSelected(tab);
-    }
-  });
+  driveTab.classList.toggle('ghost-tab', !allowed);
+  driveTab.disabled = !allowed;
+  if (!allowed) {
+    leaveIfSelected(driveTab);
+  }
 }
 
 function updateDrivePriorityLock(lampDisconnected, driveDisconnected) {

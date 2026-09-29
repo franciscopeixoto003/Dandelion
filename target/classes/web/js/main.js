@@ -5,7 +5,6 @@ import { initLamp } from './lamp.js';
 import { initSchedule } from './schedule.js';
 import { initDrive } from './drive.js';
 import { initMusic } from './music.js';
-import { initMedia } from './media.js';
 import { initZotifySettings } from './zotify-settings.js';
 import { initSettings } from './settings.js';
 
@@ -14,7 +13,6 @@ initLamp();
 initSchedule();
 initDrive();
 initMusic();
-initMedia();
 initZotifySettings();
 initSettings();
 initTabOrder();

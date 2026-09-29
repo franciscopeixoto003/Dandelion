@@ -9,7 +9,7 @@ Paste a Spotify link (track, album, playlist or episode) and pick where it goes:
 
 | Button | What happens |
 | --- | --- |
-| **Download to server** | The Pi powers on and mounts the external drive if needed, and zotify saves into `<drive>/Music` (podcasts into `<drive>/Podcasts`). |
+| **Download to Drive** | The Pi powers on and mounts the external drive if needed, and zotify saves into `<drive>/Music` (podcasts into `<drive>/Podcasts`). |
 | **Download to this device** | zotify downloads to a scratch folder on the Pi, then your browser receives the file (a single track as-is, anything larger as a `.zip`). The scratch copy is deleted after 30 minutes and on restart. |
 
 Only one download runs at a time. While a server download runs, the drive cannot be ejected (manually or by the idle timer).

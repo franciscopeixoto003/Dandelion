@@ -112,6 +112,7 @@ public class LampServer {
         if (path.endsWith(".css")) return "text/css; charset=utf-8";
         if (path.endsWith(".js")) return "text/javascript; charset=utf-8";
         if (path.endsWith(".txt")) return "text/plain; charset=utf-8";
+        if (path.endsWith(".jpeg") || path.endsWith(".jpg")) return "image/jpeg";
         return null;
     }
 

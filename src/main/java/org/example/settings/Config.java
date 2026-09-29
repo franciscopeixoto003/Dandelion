@@ -11,7 +11,6 @@ import java.util.List;
  * zotifyTempDir: scratch space for downloads sent to the browser; keep it on the SD card, not in RAM.
  * zotifyMusicDir / zotifyPodcastDir: folders on the drive that server downloads are saved into.
  * zotifySettingsFile: where the zotify options chosen in the web UI are stored.
- * streamingDir: folder on the drive whose videos the Media tab lists and streams.
  */
 public record Config(List<String> hubs, String uhubctl, int httpPort,
                      String scheduleFile, String settingsFile, String timezone,
@@ -19,7 +18,7 @@ public record Config(List<String> hubs, String uhubctl, int httpPort,
                      String lsblkCmd, String mountsFile, int driveTimeoutSeconds, int driveIdleMinutes,
                      String zotifyCmd, String zotifyConfig, String zotifyTempDir,
                      String zotifyMusicDir, String zotifyPodcastDir, int zotifyTimeoutMinutes,
-                     String zotifySettingsFile, String streamingDir) {
+                     String zotifySettingsFile) {
 
     public static Config fromEnv() {
         return new Config(
@@ -43,8 +42,7 @@ public record Config(List<String> hubs, String uhubctl, int httpPort,
                 env("ZOTIFY_MUSIC_DIR", "Music"),
                 env("ZOTIFY_PODCAST_DIR", "Podcasts"),
                 Integer.parseInt(env("ZOTIFY_TIMEOUT_MINUTES", "60")),
-                env("ZOTIFY_SETTINGS_FILE", "zotify-settings.json"),
-                env("STREAMING_DIR", "Streaming"));
+                env("ZOTIFY_SETTINGS_FILE", "zotify-settings.json"));
     }
 
     private static String env(String name, String def) {

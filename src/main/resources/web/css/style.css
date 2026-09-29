@@ -324,6 +324,13 @@ body {
   flex: 1;
 }
 
+.rule-enabled-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+}
+
 /* Buttons */
 .actions {
   display: flex;
@@ -695,18 +702,3 @@ a.btn[hidden] {
   color: var(--muted);
 }
 
-
-/* Media */
-.player {
-  display: block;
-  width: 100%;
-  max-height: 70vh;
-  margin: 0.75rem 0;
-  border-radius: 8px;
-  background: #000;
-}
-
-.file.playing .file-name {
-  color: var(--accent);
-  font-weight: 600;
-}
