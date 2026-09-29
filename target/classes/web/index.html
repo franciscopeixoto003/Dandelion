@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pi Control</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script type="module" src="/js/main.js"></script>
+</head>
+<body>
+  <div class="layout">
+    <nav class="sidebar" role="tablist" aria-label="Sections" aria-orientation="vertical">
+      <button class="tab" type="button" role="tab" id="tab-home" data-pinned aria-controls="home-panel" aria-selected="true">
+        <span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span class="tab-label">Home</span>
+      </button>
+      <button class="tab" type="button" role="tab" id="tab-lamp" aria-controls="lamp-panel" aria-selected="false" tabindex="-1">
+        <span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.4 1 2.5h6c0-1.1.3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg></span><span class="tab-label">Lamp</span>
+      </button>
+      <button class="tab" type="button" role="tab" id="tab-drive" aria-controls="drive-panel" aria-selected="false" tabindex="-1">
+        <span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M3 14l3-9h12l3 9"/><path d="M7 17h.01"/></svg></span><span class="tab-label">Drive</span>
+      </button>
+      <button class="tab" type="button" role="tab" id="tab-music" aria-controls="music-panel" aria-selected="false" tabindex="-1">
+        <span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span><span class="tab-label">Zotify</span>
+      </button>
+      <button class="tab" type="button" role="tab" id="tab-media" aria-controls="media-panel" aria-selected="false" tabindex="-1">
+        <span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3z"/></svg></span><span class="tab-label">Media</span>
+      </button>
+      <button class="tab" type="button" role="tab" id="tab-settings" data-pinned aria-controls="settings-panel" aria-selected="false" tabindex="-1">
+        <span class="tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span class="tab-label">Settings</span>
+      </button>
+    </nav>
+
+    <main class="app">
+      <div class="panel" id="home-panel" role="tabpanel" aria-labelledby="tab-home">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100%; padding: 2rem;">
+          <pre id="home-title-ascii" style="font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.2; margin: 0; white-space: pre; text-align: left; color: inherit;"></pre>
+          <pre id="home-plant-ascii" style="font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.1; margin: 3rem 0 0 0; white-space: pre; text-align: left; color: inherit;"></pre>
+        </div>
+      </div>
+
+      <div class="panel" id="lamp-panel" role="tabpanel" aria-labelledby="tab-lamp" hidden>
+        <h1>Lamp</h1>
+
+        <button id="lamp" class="lamp" type="button" aria-pressed="false" disabled>...</button>
+        <p id="lamp-message" class="message" role="status" aria-live="polite"></p>
+
+        <section class="card" aria-labelledby="schedule-title">
+          <h2 id="schedule-title">Schedule</h2>
+          <p id="timezone" class="timezone"></p>
+
+          <div id="rules"></div>
+          <p id="schedule-message" class="message" role="status" aria-live="polite"></p>
+
+          <div class="actions">
+            <button id="add-rule" class="btn" type="button">+ Add schedule</button>
+            <button id="save-rules" class="btn primary" type="button">Save schedule</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="panel" id="drive-panel" role="tabpanel" aria-labelledby="tab-drive" hidden>
+        <h1>Drive</h1>
+
+        <section class="card" aria-labelledby="drive-title">
+          <h2 id="drive-title" class="visually-hidden">Drive</h2>
+          <p id="drive-status" class="subtitle">Checking...</p>
+
+          <div class="actions">
+            <button id="drive-open" class="btn primary" type="button" disabled>Open drive</button>
+            <button id="drive-close" class="btn" type="button" hidden>Eject &amp; power off</button>
+          </div>
+          <p id="drive-message" class="message" role="status" aria-live="polite"></p>
+
+          <div id="files" hidden>
+            <nav id="breadcrumb" class="breadcrumb" aria-label="Folder"></nav>
+            <div class="actions">
+              <label class="btn">Upload
+                <input id="upload-input" type="file" multiple hidden>
+              </label>
+              <button id="new-folder" class="btn" type="button">New folder</button>
+            </div>
+            <progress id="upload-progress" max="100" value="0" hidden></progress>
+            <p id="files-message" class="message" role="status" aria-live="polite"></p>
+            <ul id="file-list" class="file-list"></ul>
+          </div>
+        </section>
+
+        <a class="settings-link" href="#settings/drive" title="Drive settings" aria-label="Drive settings"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></a>
+      </div>
+
+      <div class="panel" id="music-panel" role="tabpanel" aria-labelledby="tab-music" hidden>
+        <h1>Zotify</h1>
+
+        <section class="card" aria-labelledby="music-title">
+          <h2 id="music-title">Download a song</h2>
+          <label class="field">
+            <span>Spotify link</span>
+            <input id="music-url" type="url" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false"
+                   placeholder="https://open.spotify.com/track/...">
+          </label>
+          <small class="hint">Track, album, playlist or episode links.</small>
+
+          <div class="actions wrap">
+            <button id="music-server" class="btn primary" type="button">Download to server</button>
+            <button id="music-device" class="btn" type="button">Download to this device</button>
+          </div>
+          <small class="hint">Server saves onto the external drive. This device sends the file to the browser you are using.</small>
+
+          <p id="music-message" class="message" role="status" aria-live="polite"></p>
+          <p class="center"><a id="music-save" class="btn" hidden>Save file again</a></p>
+        </section>
+
+        <a class="settings-link" href="#settings/zotify" title="Zotify settings" aria-label="Zotify settings"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></a>
+      </div>
+
+      <div class="panel" id="media-panel" role="tabpanel" aria-labelledby="tab-media" hidden>
+        <h1>Media</h1>
+
+        <section id="media-player-card" class="card wide" aria-labelledby="media-now-playing" hidden>
+          <h2 id="media-now-playing">Now playing</h2>
+          <video id="media-player" class="player" controls playsinline preload="metadata"></video>
+          <div class="actions">
+            <button id="media-close" class="btn" type="button">Close player</button>
+          </div>
+        </section>
+
+        <section class="card wide" aria-labelledby="media-title">
+          <h2 id="media-title" class="visually-hidden">Library</h2>
+          <p id="media-status" class="subtitle">Checking...</p>
+
+          <div class="actions">
+            <button id="media-open" class="btn primary" type="button" disabled>Open drive</button>
+          </div>
+          <p id="media-message" class="message" role="status" aria-live="polite"></p>
+
+          <div id="media-library" hidden>
+            <nav id="media-breadcrumb" class="breadcrumb" aria-label="Folder"></nav>
+            <ul id="media-list" class="file-list"></ul>
+          </div>
+        </section>
+      </div>
+
+      <div class="panel" id="settings-panel" role="tabpanel" aria-labelledby="tab-settings" hidden>
+        <h1>Settings</h1>
+
+        <div class="subtabs" role="tablist" aria-label="Settings sections">
+          <button class="subtab" type="button" role="tab" id="subtab-drive" aria-controls="settings-drive-panel" aria-selected="true">Drive</button>
+          <button class="subtab" type="button" role="tab" id="subtab-zotify" aria-controls="settings-zotify-panel" aria-selected="false" tabindex="-1">Zotify</button>
+        </div>
+
+        <div class="subpanel" id="settings-drive-panel" role="tabpanel" aria-labelledby="subtab-drive">
+          <section class="card" aria-labelledby="settings-title">
+            <h2 id="settings-title" class="visually-hidden">Drive settings</h2>
+            <label class="setting">
+              <span class="setting-text">
+                <strong>Lamp disconnected</strong>
+                <small>
+                  Turn On if the lamp is physically disconnected.<br>
+                  The Lamp tab will be unavailable.
+                </small>
+              </span>
+              <span class="switch">
+                <input id="allow-lamp-disconnect" type="checkbox" role="switch" disabled>
+                <span class="slider" aria-hidden="true"></span>
+              </span>
+            </label>
+            <label class="setting">
+              <span class="setting-text">
+                <strong>Drive disconnected</strong>
+                <small>
+                  Turn On if the drive is physically disconnected.<br>
+                  The Drive and Media tabs will be unavailable and the Drive Priority setting will be locked.
+                </small>
+              </span>
+              <span class="switch">
+                <input id="allow-drive-disconnect" type="checkbox" role="switch" disabled>
+                <span class="slider" aria-hidden="true"></span>
+              </span>
+            </label>
+            <label class="setting">
+              <span class="setting-text">
+                <strong>Drive priority</strong>
+                <small>
+                  All USB ports share one power switch.<br>
+                  When on, ejecting the drive always cuts USB power, which also switches the lamp off.<br>
+                  When off, power stays on while the lamp is on.
+                </small>
+              </span>
+              <span class="switch">
+                <input id="drive-priority" type="checkbox" role="switch" disabled>
+                <span class="slider" aria-hidden="true"></span>
+              </span>
+            </label>
+            <p id="settings-message" class="message" role="status" aria-live="polite"></p>
+          </section>
+        </div>
+
+        <div class="subpanel" id="settings-zotify-panel" role="tabpanel" aria-labelledby="subtab-zotify" hidden>
+          <p class="subtitle intro">
+            Changes are saved as soon as you pick a value and apply to the next download.
+            "Default" leaves the option to zotify's own config file.
+          </p>
+          <p id="zotify-message" class="message" role="status" aria-live="polite"></p>
+          <div id="zotify-settings" class="settings-groups"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <template id="rule-template">
+    <article class="rule">
+      <fieldset class="days">
+        <legend class="visually-hidden">Days of the week</legend>
+        <label class="day"><input type="checkbox" value="MONDAY"><span>Mon</span></label>
+        <label class="day"><input type="checkbox" value="TUESDAY"><span>Tue</span></label>
+        <label class="day"><input type="checkbox" value="WEDNESDAY"><span>Wed</span></label>
+        <label class="day"><input type="checkbox" value="THURSDAY"><span>Thu</span></label>
+        <label class="day"><input type="checkbox" value="FRIDAY"><span>Fri</span></label>
+        <label class="day"><input type="checkbox" value="SATURDAY"><span>Sat</span></label>
+        <label class="day"><input type="checkbox" value="SUNDAY"><span>Sun</span></label>
+      </fieldset>
+      <div class="times">
+        <label>On <input type="time" class="rule-on" required></label>
+        <label>Off <input type="time" class="rule-off" required></label>
+        <span class="spacer"></span>
+        <label><input type="checkbox" class="rule-enabled"> Enabled</label>
+        <button type="button" class="btn danger rule-delete">Delete</button>
+      </div>
+    </article>
+  </template>
+</body>
+</html>
