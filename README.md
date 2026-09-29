@@ -87,9 +87,11 @@ The server reads these environment variables (all optional):
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
+| `DANDELION_SCHEDULE_FILE` | `assets/schedules.json` | Where lamp schedules are stored (relative to the server's working directory). |
+| `SETTINGS_FILE` | `assets/settings.json` | Where lamp and drive settings are stored (relative to the server's working directory). |
 | `ZOTIFY_CMD` | `zotify` | How to run zotify. When started by systemd `PATH` usually lacks `~/.local/bin`, so use the full path, e.g. `/home/pi/.local/bin/zotify`. |
 | `ZOTIFY_CONFIG` | *(zotify default)* | Path to a zotify `config.json` (or its folder), passed as `-c`. |
-| `ZOTIFY_TEMP_DIR` | `/var/tmp/Dandelion1-zotify` | Scratch space for "download to this device". Keep it on the SD card: `/tmp` can be RAM-backed and albums are big. |
+| `ZOTIFY_TEMP_DIR` | `/var/tmp/Dandelion-zotify` | Scratch space for "download to this device". Keep it on the SD card: `/tmp` can be RAM-backed and albums are big. |
 | `ZOTIFY_MUSIC_DIR` | `Music` | Folder on the drive for music. |
 | `ZOTIFY_PODCAST_DIR` | `Podcasts` | Folder on the drive for podcasts. |
 | `ZOTIFY_TIMEOUT_MINUTES` | `60` | A download running longer than this is stopped. |
@@ -101,7 +103,7 @@ Set them in the service unit, for example:
 [Service]
 User=pi
 Environment=ZOTIFY_CMD=/home/pi/.local/bin/zotify
-Environment=ZOTIFY_TEMP_DIR=/var/tmp/Dandelion1-zotify
+Environment=ZOTIFY_TEMP_DIR=/var/tmp/Dandelion-zotify
 ```
 
 `ffmpeg` must also be on the service's `PATH` (`/usr/bin/ffmpeg` from apt is). Then restart the service:

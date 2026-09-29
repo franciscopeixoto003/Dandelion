@@ -13,7 +13,7 @@ touch "$SIM/device"
 echo off > "$SIM/usb"
 : > "$SIM/mounts"
 
-[ -f "$ROOT/target/Dandelion1.jar" ] || (cd "$ROOT" && mvn -q package)
+[ -f "$ROOT/target/Dandelion.jar" ] || (cd "$ROOT" && mvn -q package)
 
 export HTTP_PORT="${HTTP_PORT:-8080}"
 export UHUBCTL="$DEV_DIR/fake-uhubctl.sh" FAKE_UHUBCTL_STATE="$SIM/usb"
@@ -24,4 +24,4 @@ export DRIVE_TIMEOUT_SECONDS=5
 export ZOTIFY_CMD="$DEV_DIR/fake-zotify.sh" ZOTIFY_TEMP_DIR="$SIM/zotify-tmp"
 
 echo "Simulated Pi on http://localhost:$HTTP_PORT  (USB power state: watch 'cat $SIM/usb')"
-exec java -jar "$ROOT/target/Dandelion1.jar"
+exec java -jar "$ROOT/target/Dandelion.jar"

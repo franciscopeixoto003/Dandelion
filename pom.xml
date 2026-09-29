@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>Dandelion1</artifactId>
+    <artifactId>Dandelion</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -23,7 +23,7 @@
     </dependencies>
 
     <build>
-        <finalName>Dandelion1</finalName>
+        <finalName>Dandelion</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
