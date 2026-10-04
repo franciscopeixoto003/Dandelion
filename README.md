@@ -126,6 +126,69 @@ work. Either set `User=root` (then zotify must be installed and logged in as roo
 [step 4 of the zotify section](#4-configure-the-dandelion-server) for all options, and
 [Troubleshooting](#troubleshooting) for common errors.
 
+## Controlling the lamp from your phone on another network (Tailscale)
+
+The UI has no login, so do **not** forward a port on your router to the internet; anyone who found it could switch
+your lamp. [Tailscale](https://tailscale.com) is a free private VPN that lets your phone reach the Pi from any network,
+including mobile data. zotify is not needed for this.
+
+### 1. Run the app on the Pi
+
+```bash
+sudo apt update
+sudo apt install -y git maven uhubctl curl zip unzip
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk list java | grep -i tem      # pick a 25.x-tem
+sdk install java <that-version>
+git clone https://github.com/franciscopeixoto003/Dandelion.git ~/Dandelion
+cd ~/Dandelion && mvn package
+sudo java -jar target/Dandelion.jar
+```
+
+- `sudo` is needed because `uhubctl` needs root to switch USB power. If `sudo java` is not found, use the full path
+  from `which java`.
+- Test it from another device on the same network at `http://<pi-hostname>.local:8080`.
+- Run `sudo uhubctl` to check the hubs. If the lamp does not respond, set `DANDELION_HUBS=3,5`.
+
+### 2. Install Tailscale on the Pi
+
+```bash
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+```
+
+Open the login link it prints, sign in and approve. Then get the Pi's Tailscale IP:
+
+```bash
+tailscale ip -4      # e.g. 100.101.102.103
+```
+
+### 3. Install Tailscale on your phone
+
+Install the Tailscale app, sign in with the **same account** and turn it on. Then, from any network, open this in the
+phone's browser (use your Pi's IP from step 2):
+
+```
+http://100.101.102.103:8080
+```
+
+### 4. Start on boot
+
+Use the systemd service from [step 7](#7-run-it-as-a-service-so-it-starts-on-boot) above, with `User=root` so
+`uhubctl` works, then:
+
+```bash
+sudo systemctl enable --now dandelion
+```
+
+Tailscale starts on boot by default.
+
+### Optional
+
+- On the phone, use "Add to Home Screen" for an app-like icon.
+- With Tailscale MagicDNS you can use `http://<pi-hostname>:8080` instead of the IP.
+
 ## Zotify tab
 
 Paste a Spotify link (track, album, playlist or episode) and pick where it goes:
