@@ -3,6 +3,129 @@
 Web UI running on the Raspberry Pi: lamp schedule, external drive file manager, and a **Zotify** tab that downloads
 Spotify links with [zotify](https://github.com/Googolplexed0/zotify).
 
+## Running Dandelion on a Raspberry Pi (step by step)
+
+Run everything on the Pi over SSH. The steps assume Raspberry Pi OS (64-bit) and the user `pi`; replace it with your own
+username if it differs.
+
+### 1. Install the system packages
+
+```bash
+sudo apt update
+sudo apt install -y git maven ffmpeg pipx uhubctl python3 curl zip unzip
+pipx ensurepath   # then log out and back in
+```
+
+### 2. Install Java 25
+
+`pom.xml` targets Java 25 (`maven.compiler.source`), which is newer than what Raspberry Pi OS ships in apt.
+The easiest way is [SDKMAN](https://sdkman.io). The `sdk` command only exists after SDKMAN is installed
+(`sdk: command not found` means this step was skipped):
+
+```bash
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk version                  # confirm it works
+sdk list java | grep -i tem  # find the exact Temurin 25 identifier
+sdk install java 25.0.1-tem  # use the identifier from the list above
+java -version
+```
+
+`25.0.1-tem` is only an example; use whichever `25.x-tem` version the list shows.
+
+Alternatives:
+
+- `sudo apt install -y openjdk-25-jdk`, only if your Pi OS release has it (`apt search openjdk-25`).
+- Download the Linux aarch64 JDK 25 tarball from [adoptium.net](https://adoptium.net), extract it to `/opt/jdk-25`
+  and use `/opt/jdk-25/bin/java`.
+
+Remember which `java` you ended up with; step 7 needs its full path (`which java`).
+
+### 3. Get the code and build the jar
+
+```bash
+git clone https://github.com/franciscopeixoto003/Dandelion.git ~/Dandelion
+cd ~/Dandelion
+mvn package          # produces target/Dandelion.jar
+```
+
+If you copied the folder over instead of cloning, still run `mvn package` on the Pi. Do not reuse a `target/` folder
+built on another machine.
+
+### 4. Install zotify and log in once
+
+Only needed for the Zotify tab. Run it as the same user that will run the server. Follow
+[Installing zotify on the Raspberry Pi](#installing-zotify-on-the-raspberry-pi) below, in short:
+
+```bash
+pipx install git+https://github.com/Googolplexed0/zotify.git
+```
+
+Then, from your computer, open a tunnel for the login redirect:
+
+```bash
+ssh -L 4381:127.0.0.1:4381 pi@<pi-address>
+```
+
+In that session run `zotify https://open.spotify.com/track/<any-id>`, open the login URL it prints in your computer's
+browser and approve it. Run the same command again to confirm it no longer asks you to log in.
+
+### 5. Check the hardware (lamp and drive)
+
+- Run `sudo uhubctl` and confirm it lists the hubs. The default is `DANDELION_HUBS=2,4`. On the Pi 5 the ports can be
+  ganged across hubs 3 and 5 instead; if that is what `uhubctl` shows, set `DANDELION_HUBS=3,5`.
+- Plug in the external drive. Set `DRIVE_DEVICE` if auto-detect picks the wrong device.
+- Create the mount point (default `/mnt/usbdrive`): `sudo mkdir -p /mnt/usbdrive`.
+- The server must be able to run `uhubctl`, `mount` and `umount`. Either run it as root or allow those commands
+  without a password (sudoers).
+
+### 6. Do a test run
+
+```bash
+cd ~/Dandelion
+java -jar target/Dandelion.jar
+```
+
+Open `http://<pi-address>:8080` from another device. Do not use `dev/run-simulated.sh` on the Pi; it uses fake hardware.
+
+### 7. Run it as a service so it starts on boot
+
+Create `/etc/systemd/system/dandelion.service`:
+
+```ini
+[Unit]
+Description=Dandelion
+After=network-online.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/Dandelion
+ExecStart=/usr/bin/java -jar /home/pi/Dandelion/target/Dandelion.jar
+Environment=ZOTIFY_CMD=/home/pi/.local/bin/zotify
+Environment=ZOTIFY_TEMP_DIR=/var/tmp/Dandelion-zotify
+# Environment=DANDELION_HUBS=3,5
+# Environment=HTTP_PORT=8080
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Set `ExecStart` to the full path of your Java 25 binary if it is not `/usr/bin/java`. With SDKMAN that is
+`/home/pi/.sdkman/candidates/java/current/bin/java` (use your own home path if the user is not `pi`). Then:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now dandelion
+journalctl -u dandelion -f    # view logs
+```
+
+The service user needs permission to run `uhubctl`, `mount` and `umount`, otherwise USB power and the drive will not
+work. Either set `User=root` (then zotify must be installed and logged in as root too), or set up sudoers and point
+`UHUBCTL`, `MOUNT_CMD` and `UMOUNT_CMD` at sudo wrappers. See the environment variable table in
+[step 4 of the zotify section](#4-configure-the-dandelion-server) for all options, and
+[Troubleshooting](#troubleshooting) for common errors.
+
 ## Zotify tab
 
 Paste a Spotify link (track, album, playlist or episode) and pick where it goes:
